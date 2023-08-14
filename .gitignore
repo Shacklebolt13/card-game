@@ -132,6 +132,8 @@ dmypy.json
 # media files
 /media
 
+# static files
+/staticfiles
 node_modules/
 package*.json
 
