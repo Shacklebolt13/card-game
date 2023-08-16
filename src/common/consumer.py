@@ -1,6 +1,7 @@
-from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from typing import Dict, Any, Callable
 import logging
+from typing import Any, Callable, Dict
+
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 
 class Consumer(AsyncJsonWebsocketConsumer):
