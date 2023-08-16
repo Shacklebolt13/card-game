@@ -38,20 +38,20 @@ jobs:
         with:
           python-version: "3.11"
       - uses: Gr1N/setup-poetry@v8
+        env:
+          POETRY_VIRTUALENVS_IN_PROJECT : true
       - uses: actions/cache@v2
         with:
-          path: ~/.cache/pypoetry/virtualenvs
+          path: .venv/
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       
       - name: Run isort
         uses: isort/isort-action@master
       - name: Run black
         uses: psf/black@stable
-      # - name: Run flake8
-      #   run: flake8
+      - name: Run flake8
+        run: flake8
       - name: Type check
-        uses: jpetrucciani/mypy-check@master
-        with:
-          mypy_flags: '--config-file mypy.ini'
+        run: mypy --config mypy.ini src/
       - name: Run tests
         run: pytest
