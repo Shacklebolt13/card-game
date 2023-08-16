@@ -43,7 +43,7 @@ jobs:
           POETRY_VIRTUALENVS_IN_PROJECT : true
       - uses: actions/cache@v2
         with:
-          path: .venv/
+          path: /home/runner/work/card-game/card-game/.venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       
       - name: Run isort
@@ -51,8 +51,8 @@ jobs:
       - name: Run black
         uses: psf/black@stable
       - name: Run flake8
-        run: flake8
+        run: /home/runner/work/card-game/card-game/.venv/bin/flake8
       - name: Type check
-        run: ./venv/bin/mypy --config mypy.ini src/
+        run: /home/runner/work/card-game/card-game/.venv/bin/mypy --config mypy.ini src/
       - name: Run tests
-        run: pytest
+        run: /home/runner/work/card-game/card-game/.venv/bin/pytest
