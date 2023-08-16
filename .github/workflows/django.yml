@@ -52,6 +52,6 @@ jobs:
       - name: Type check
         uses: jpetrucciani/mypy-check@master
         with:
-          mypy_flags: '--config-file .mypy.ini'
+          mypy_flags: '--config-file mypy.ini'
       - name: Run tests
         run: pytest
