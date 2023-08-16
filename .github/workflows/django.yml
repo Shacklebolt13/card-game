@@ -50,8 +50,8 @@ jobs:
       - name: Run black
         uses: psf/black@stable
       - name: Run flake8
-        run: flake8
+        run: ./venv/bin/flake8
       - name: Type check
-        run: mypy --config mypy.ini src/
+        run: ./venv/bin/mypy --config mypy.ini src/
       - name: Run tests
         run: pytest
