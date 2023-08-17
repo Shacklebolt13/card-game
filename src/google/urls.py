@@ -1,6 +1,6 @@
 from django.urls import path
 
-from src.blog_examples.google_login_server_flow.sdk.apis import (
+from apis import (
     GoogleLoginApi,
     GoogleLoginRedirectApi,
 )

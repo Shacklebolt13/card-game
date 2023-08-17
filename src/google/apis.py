@@ -4,9 +4,7 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from src.blog_examples.google_login_server_flow.raw.service import (
-    GoogleRawLoginFlowService,
-)
+from services import GoogleSdkLoginFlowService
 from src.users.selectors import user_list
 
 
@@ -17,7 +15,7 @@ class PublicApi(APIView):
 
 class GoogleLoginRedirectApi(PublicApi):
     def get(self, request, *args, **kwargs):
-        google_login_flow = GoogleRawLoginFlowService()
+        google_login_flow = GoogleSdkLoginFlowService()
 
         authorization_url, state = google_login_flow.get_authorization_url()
 
@@ -58,9 +56,9 @@ class GoogleLoginApi(PublicApi):
         if state != session_state:
             return Response({"error": "CSRF check failed."}, status=status.HTTP_400_BAD_REQUEST)
 
-        google_login_flow = GoogleRawLoginFlowService()
+        google_login_flow = GoogleSdkLoginFlowService()
 
-        google_tokens = google_login_flow.get_tokens(code=code)
+        google_tokens = google_login_flow.get_tokens(code=code, state=state)
 
         id_token_decoded = google_tokens.decode_id_token()
         user_info = google_login_flow.get_user_info(google_tokens=google_tokens)
