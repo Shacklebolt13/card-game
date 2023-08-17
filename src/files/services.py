@@ -14,7 +14,6 @@ from src.files.utils import (
     file_generate_name,
     file_generate_upload_path,
 )
-from src.integrations.aws.client import s3_generate_presigned_post
 from src.users.models import BaseUser
 
 
@@ -47,11 +46,7 @@ class FileStandardUploadService:
         if not file_type:
             guessed_file_type, encoding = mimetypes.guess_type(file_name)
 
-            if guessed_file_type is None:
-                file_type = ""
-            else:
-                file_type = guessed_file_type
-
+            file_type = "" if guessed_file_type is None else guessed_file_type
         return file_name, file_type
 
     @transaction.atomic
@@ -128,13 +123,9 @@ class FileDirectUploadService:
 
         presigned_data: Dict[str, Any] = {}
 
-        if settings.FILE_UPLOAD_STORAGE == FileUploadStorage.S3:
-            presigned_data = s3_generate_presigned_post(file_path=upload_path, file_type=file.file_type)
-
-        else:
-            presigned_data = {
-                "url": file_generate_local_upload_url(file_id=str(file.id)),
-            }
+        presigned_data = {
+            "url": file_generate_local_upload_url(file_id=str(file.id)),
+        }
 
         return {"id": file.id, **presigned_data}
 
