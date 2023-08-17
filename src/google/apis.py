@@ -3,8 +3,8 @@ from django.shortcuts import redirect
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from services import GoogleSdkLoginFlowService
+
 from src.users.selectors import user_list
 
 

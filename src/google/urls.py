@@ -1,9 +1,5 @@
+from apis import GoogleLoginApi, GoogleLoginRedirectApi
 from django.urls import path
-
-from apis import (
-    GoogleLoginApi,
-    GoogleLoginRedirectApi,
-)
 
 urlpatterns = [
     path("callback/", GoogleLoginApi.as_view(), name="callback-sdk"),
