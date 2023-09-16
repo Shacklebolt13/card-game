@@ -25,8 +25,7 @@ class GoogleAccessTokens:
 
     def decode_id_token(self) -> Dict[str, Any]:
         id_token = self.id_token
-        decoded_token = jwt.decode(jwt=id_token, options={"verify_signature": False})
-        return decoded_token
+        return jwt.decode(jwt=id_token, options={"verify_signature": False})
 
 
 class GoogleSdkLoginFlowService:
@@ -54,12 +53,10 @@ class GoogleSdkLoginFlowService:
     def _get_redirect_uri(self):
         domain = settings.BASE_BACKEND_URL
         api_uri = self.API_URI
-        redirect_uri = f"{domain}{api_uri}"
-        return redirect_uri
+        return f"{domain}{api_uri}"
 
     def _generate_client_config(self):
-        # This follows the structure of the official "client_secret.json" file
-        client_config = {
+        return {
             self.GOOGLE_CLIENT_TYPE: {
                 "client_id": self._credentials.client_id,
                 "project_id": self._credentials.project_id,
@@ -71,7 +68,6 @@ class GoogleSdkLoginFlowService:
                 "javascript_origins": [settings.BASE_FRONTEND_URL],
             }
         }
-        return client_config
 
     def get_authorization_url(self):
         redirect_uri = self._get_redirect_uri()
@@ -98,16 +94,13 @@ class GoogleSdkLoginFlowService:
             client_config=client_config, scopes=self.SCOPES, state=state
         )
         flow.redirect_uri = redirect_uri
-        access_credentials_payload = flow.fetch_token(code=code)
-
-        if not access_credentials_payload:
+        if access_credentials_payload := flow.fetch_token(code=code):
+            return GoogleAccessTokens(
+                id_token=access_credentials_payload["id_token"],
+                access_token=access_credentials_payload["access_token"],
+            )
+        else:
             raise ValidationError("Failed to obtain access credentials from Google")
-
-        google_tokens = GoogleAccessTokens(
-            id_token=access_credentials_payload["id_token"], access_token=access_credentials_payload["access_token"]
-        )
-
-        return google_tokens
 
     def get_user_info(self, *, google_tokens: GoogleAccessTokens) -> Dict[str, Any]:
         access_token = google_tokens.access_token
@@ -134,6 +127,4 @@ def google_sdk_login_get_credentials() -> GoogleSdkLoginCredentials:
     if not project_id:
         raise ImproperlyConfigured("GOOGLE_OAUTH2_PROJECT_ID missing in env.")
 
-    credentials = GoogleSdkLoginCredentials(client_id=client_id, client_secret=client_secret, project_id=project_id)
-
-    return credentials
+    return GoogleSdkLoginCredentials(client_id=client_id, client_secret=client_secret, project_id=project_id)

@@ -36,11 +36,8 @@ LOCAL_APPS = [
     "src.api.apps.ApiConfig",
     "src.users.apps.UsersConfig",
     "src.errors.apps.ErrorsConfig",
-    "src.testing_examples.apps.TestingExamplesConfig",
-    "src.integrations.apps.IntegrationsConfig",
     "src.files.apps.FilesConfig",
     "src.emails.apps.EmailsConfig",
-    "src.blog_examples.apps.BlogExamplesConfig",
 ]
 
 THIRD_PARTY_APPS = [

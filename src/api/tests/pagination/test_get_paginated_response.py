@@ -22,15 +22,13 @@ class ExampleListApi(APIView):
     def get(self, request):
         queryset = BaseUser.objects.order_by("id")
 
-        response = get_paginated_response(
+        return get_paginated_response(
             pagination_class=self.Pagination,
             serializer_class=self.OutputSerializer,
             queryset=queryset,
             request=request,
             view=self,
         )
-
-        return response
 
 
 class GetPaginatedResponseTests(TestCase):
