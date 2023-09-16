@@ -1,4 +1,4 @@
-from apis import GoogleLoginApi, GoogleLoginRedirectApi
+from .apis import GoogleLoginApi, GoogleLoginRedirectApi
 from django.urls import path
 
 urlpatterns = [
