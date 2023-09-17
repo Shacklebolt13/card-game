@@ -14,9 +14,9 @@ filter_files = true
 skip_glob = ["*/migrations/*", "config/*"]
 
 [tool.poetry]
-name = "bloggy"
+name = "Card Game"
 version = "1.0"
-description = ""
+description = "Online Black Jack Game"
 authors = ["Shacklebolt"]
 readme = "README.md"
 
@@ -45,6 +45,7 @@ google-auth = "2.21.0"
 google-auth-httplib2 = "0.1.0"
 google-auth-oauthlib = "1.0.0"
 channels = {extras = ["daphne"], version = "^4.0.0"}
+pytest-cov = "^4.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.3.0"
@@ -66,3 +67,35 @@ pre-commit = "3.2.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/urls.py",
+    "*/routing.py",
+    "*/asgi.py",
+    "*/wsgi.py",
+]
+
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
+
+ignore_errors = true
