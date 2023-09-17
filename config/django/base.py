@@ -177,6 +177,7 @@ from config.settings.google_oauth2 import *  # noqa
 from config.settings.jwt import *  # noqa
 from config.settings.sentry import *  # noqa
 from config.settings.sessions import *  # noqa
+from config.settings.logging import *  # noqa
 
 from config.settings.debug_toolbar.settings import *  # noqa
 from config.settings.debug_toolbar.setup import DebugToolbarSetup  # noqa

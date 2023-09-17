@@ -1,21 +1,34 @@
-import logging
-from typing import Any, Callable, Dict
-
+from typing import Any, Callable, Dict,Coroutine
+from abc import ABCMeta
 from channels.generic.websocket import AsyncJsonWebsocketConsumer  # type: ignore
+from ..core.logging import logger
+from logging import Logger
 
+ROUTING_TABLE : Dict[str, Callable] = {}
 
-class Consumer(AsyncJsonWebsocketConsumer):
-    ROUTING: Dict[str, Callable]
+def route(handler : str) -> Callable:
+    def decorator(func : Callable) -> Callable:
+        ROUTING_TABLE[handler] = func
+        return func
+    return decorator
+
+@logger
+class Consumer(AsyncJsonWebsocketConsumer,metaclass=ABCMeta):
+    log : Logger
+    
+    @property
+    def get_routing(self) -> Dict[str, Callable]:
+        return ROUTING_TABLE
 
     AUTH = False
-    logger: logging.Logger
 
     async def connect(self):
         await super().connect()
 
-        user = self.scope["user"] if self.scope["user"].is_authenticated else None
+        user = self.scope.get("user",None)
+        user = user.is_authenticated or None
 
-        if self.AUTH and user is None:
+        if self.AUTH and not user:
             await self.send_json({"message": "unauthorized"})
             return await self.close()
 
@@ -30,11 +43,11 @@ class Consumer(AsyncJsonWebsocketConsumer):
         """
         Handle incoming messages and route them to the appropriate handler.
         """
-        return await self.ROUTING.get(content.get("handler", ""), Consumer.no_route)(self, content, **kwargs)
+        handler = self.get_routing.get(content.get("handler", ""), Consumer.no_route)
+        return await handler(self, content, **kwargs)
 
     async def no_route(self, content, **kwargs) -> Dict:
         return {"message": f"No route for {content.get('handler', '')}"}
 
     async def receive_json(self, content, **kwargs) -> None:
-        self.logger.debug(f"Received {content} with {kwargs}")
         return await self.send_json(await self.handle(content, **kwargs), **kwargs)
