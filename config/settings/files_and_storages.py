@@ -29,7 +29,5 @@ if FILE_UPLOAD_STORAGE == FileUploadStorage.S3:
 
     AWS_PRESIGNED_EXPIRY = env.int("AWS_PRESIGNED_EXPIRY", default=10)  # seconds
 
-    _AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default="")
-
-    if _AWS_S3_CUSTOM_DOMAIN:
+    if _AWS_S3_CUSTOM_DOMAIN := env("AWS_S3_CUSTOM_DOMAIN", default=""):
         AWS_S3_CUSTOM_DOMAIN = _AWS_S3_CUSTOM_DOMAIN

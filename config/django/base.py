@@ -35,7 +35,6 @@ LOCAL_APPS = [
     "src.tasks.apps.TasksConfig",
     "src.api.apps.ApiConfig",
     "src.users.apps.UsersConfig",
-    "src.errors.apps.ErrorsConfig",
     "src.files.apps.FilesConfig",
     "src.emails.apps.EmailsConfig",
 ]

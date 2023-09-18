@@ -29,7 +29,7 @@ class GoogleAccessTokens:
 
 
 class GoogleSdkLoginFlowService:
-    API_URI = reverse_lazy("api:google-oauth2:login-sdk:callback-sdk")
+    API_URI = reverse_lazy("api:oauth2:callback-sdk")
 
     # Two options are available: 'web', 'installed'
     GOOGLE_CLIENT_TYPE = "web"
